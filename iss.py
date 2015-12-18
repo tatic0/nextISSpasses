@@ -10,7 +10,7 @@ lon = 2.259434
 # altitude is just BS
 alt = 100
 # how many future passes, further passes are less precise and can change
-passes = 3
+passes = 1
 baseurl = "http://api.open-notify.org/iss-pass.json"
 query = "lat=" + str(lat) + "&lon=" + str(lon) + "&alt=" + str(alt) + "&n=" + str(passes)
 
@@ -29,7 +29,21 @@ for i in response:
   duration = i['duration']
   risetime = i['risetime']
   begintime = lambda x:datetime.datetime.fromtimestamp(x).strftime('%Y-%m-%d %H:%M:%S')
-  endtime = lambda x, y:datetime.datetime.fromtimestamp(x + y).strftime('%Y-%m-%d %H:%M:%S') 
-  passtime = lambda x: str(datetime.timedelta(seconds=x))
-  print("Station pass starts at: {0} and ends at: {1}".format(begintime(risetime),endtime(risetime, duration)))
-  print("  Duration {0}".format(passtime(duration)))
+  beginTime = datetime.datetime.fromtimestamp(risetime).strftime('%Y-%m-%d %H:%M:%S')
+  passDate = beginTime[0:10]
+  #print(beginTime[0:10])
+  today = datetime.datetime.today().strftime('%Y-%m-%d')
+  #print(today) 
+  if passDate == today:
+    #print("look up, you fool")
+    endtime = lambda x, y:datetime.datetime.fromtimestamp(x + y).strftime('%Y-%m-%d %H:%M:%S') 
+    passtime = lambda x: str(datetime.timedelta(seconds=x))
+    print("Station pass starts at: {0} and \nends at: {1}".format(begintime(risetime),endtime(risetime, duration)))
+    print("Duration {0}".format(passtime(duration)))
+
+
+
+###
+###  where is the ISS now?
+###  https://www.youtube.com/watch?v=OQ1QHiYsSGE
+###
